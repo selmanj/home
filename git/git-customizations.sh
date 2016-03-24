@@ -10,8 +10,11 @@ source ~/.git-completion.bash
 source ~/.git-prompt.sh
 
 # Set our custom prompt!
+# Note that we need to wrap escape codes with \001<escape code>\002 to signal
+# to bash that the characters in between should not be counted against line
+# width.
 if [[ "$(tput colors)" -eq "256" ]]; then 
-    PROMPT_COMMAND='__git_ps1 "\e[0m\e[38;5;24m\u\e[38;5;238m@\e[38;5;90m\h\e[38;5;238m:\e[0m\w" "\\\$ "'
+    PROMPT_COMMAND='__git_ps1 "\001\e[0m\e[38;5;24m\002\u\001\e[38;5;238m\002@\001\e[38;5;90m\002\h\001\e[38;5;238m\002:\001\e[0m\002\w" "\\\$ "'
 else 
     PROMPT_COMMAND='__git_ps1 "\u@\h:\w" "\\\$ "'
 fi
