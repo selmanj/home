@@ -1,5 +1,11 @@
 #!/bin/bash
 
+function add_line_if_missing() {
+    local -r line="$1"
+    local -r file="$2"
+    grep -q -F "${line}" "${file}" || echo "${line}" >> "${file}"
+}
+
 set -x
 DIR="$(cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
@@ -9,6 +15,6 @@ ln -s "${DIR}/tmux.conf" "${HOME}/.tmux.conf"
 
 # Git-Bash integration
 ln -s "${DIR}/git/git-completion.bash" "${HOME}/.git-completion.bash"
-SOURCE_LINE="source ~/.git-completion.bash"
-grep -q -F "${SOURCE_LINE}" "${HOME}/.bashrc" || echo "${SOURCE_LINE}" >> "${HOME}/.bashrc"
-
+ln -s "${DIR}/git/git-prompt.sh" "${HOME}/.git-prompt.sh"
+ln -s "${DIR}/git/git-customizations.sh" "${HOME}/.git-customizations.sh"
+add_line_if_missing "source ~/.git-customizations.sh" "${HOME}/.bashrc"
