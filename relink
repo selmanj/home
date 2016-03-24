@@ -18,3 +18,7 @@ ln -s "${DIR}/git/git-completion.bash" "${HOME}/.git-completion.bash"
 ln -s "${DIR}/git/git-prompt.sh" "${HOME}/.git-prompt.sh"
 ln -s "${DIR}/git/git-customizations.sh" "${HOME}/.git-customizations.sh"
 add_line_if_missing "source ~/.git-customizations.sh" "${HOME}/.bashrc"
+
+# Bash helpers
+ln -s "${DIR}/bash/ssh-agent.sh" "${HOME}/.ssh-agent.sh"
+add_line_if_missing "source ~/.ssh-agent.sh" "${HOME}/.bash_profile"
