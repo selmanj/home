@@ -2,6 +2,13 @@
 
 set -x
 DIR="$(cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+# Tmux-related files
 ln -n -s "${DIR}/tmux" "${HOME}/.tmux"
 ln -s "${DIR}/tmux.conf" "${HOME}/.tmux.conf" 
+
+# Git-Bash integration
+ln -s "${DIR}/git/git-completion.bash" "${HOME}/.git-completion.bash"
+SOURCE_LINE="source ~/.git-completion.bash"
+grep -q -F "${SOURCE_LINE}" "${HOME}/.bashrc" || echo "${SOURCE_LINE}" >> "${HOME}/.bashrc"
 
