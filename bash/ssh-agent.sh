@@ -10,7 +10,7 @@ function start_agent {
     . "${SSH_ENV}" > /dev/null
 }
 
-if [[ "$(uname -s)" -ne "Darwin" ]]; then
+if [[ "$(uname -s)" != "Darwin" ]]; then
     # Source SSH settings, if applicable
     if [ -f "${SSH_ENV}" ]; then
         . "${SSH_ENV}" > /dev/null
