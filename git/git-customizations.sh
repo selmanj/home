@@ -14,7 +14,8 @@ source ~/.git-prompt.sh
 # to bash that the characters in between should not be counted against line
 # width.
 if [[ "$(tput colors)" -eq "256" ]]; then 
-    PROMPT_COMMAND='__git_ps1 "\001\e[0m\e[38;5;24m\002\u\001\e[38;5;238m\002@\001\e[38;5;90m\002\h\001\e[38;5;238m\002:\001\e[0m\002\w" "\\\$ "'
+    # For now, also assume that we support UTF-8
+    PROMPT_COMMAND='__git_ps1 "\001\e[0m\e[38;5;24m\002\u\001\e[38;5;238m\002@\001\e[38;5;90m\002\h\001\e[38;5;238m\002:\001\e[0m\002\w" "🍕  "'
 else 
     PROMPT_COMMAND='__git_ps1 "\u@\h:\w" "\\\$ "'
 fi
