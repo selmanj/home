@@ -29,3 +29,4 @@ ln -s "${DIR}/vim/vim-pathogen/autoload/pathogen.vim" "${HOME}/.vim/autoload/pat
 ln -n -s "${DIR}/vim/bundle" "${HOME}/.vim/bundle"
 ln -s "${DIR}/vim/vimrc" "${HOME}/.vimrc"
 ln -n -s "${DIR}/vim/vimfiles" "${HOME}/.vim/vimfiles"
+ln -n -s "${DIR}/vim/colors" "${HOME}/.vim/colors"
