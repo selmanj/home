@@ -16,7 +16,7 @@ source ~/.misc.sh
 # width.
 if [[ "$(tput colors)" -eq "256" ]]; then 
     # For now, also assume that we support UTF-8
-    PROMPT_COMMAND='__git_ps1 "\001\e[0m\e[38;5;24m\002\u\001\e[38;5;238m@\002$(color_hostname_for_prompt \\h)\001\e[38;5;238m\002:\001\e[0m\002\w" "🍕  "'
+	PROMPT_COMMAND='__git_ps1 "\001\e[0m\e[38;5;24m\002\u\001\e[38;5;238m@\002$(color_hostname_for_prompt $(hostname))\001\e[38;5;238m\002:\001\e[0m\002\w" "🍕  "'
 else 
     PROMPT_COMMAND='__git_ps1 "\u@\h:\w" "\\\$ "'
 fi
