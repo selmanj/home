@@ -25,6 +25,7 @@ add_line_if_missing "source ~/.git-customizations.sh" "${HOME}/.bashrc"
 # Bash helpers
 ln -s "${DIR}/bash/ssh-agent.sh" "${HOME}/.ssh-agent.sh"
 add_line_if_missing "source ~/.ssh-agent.sh" "${HOME}/.bash_profile"
+ln -s "${DIR}/bash/misc.sh" "${HOME}/.misc.sh"
 
 # Vim helpers
 mkdir -p "${HOME}/.vim/autoload"
