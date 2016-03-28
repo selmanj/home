@@ -29,5 +29,5 @@ function color_hostname_for_prompt() {
 	local -r hash_val="$(hash_str ${hostname} ${#colors[@]})"
 	local -r color=${colors[${hash_val}]}
 
-	echo -e "\001\e[38;5;${color}m\002${hostname}"
+	printf "\\\001\\\e[38;5;%dm\\\002%s" "${color}" "${hostname}"
 }
