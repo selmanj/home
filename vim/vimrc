@@ -3,3 +3,7 @@ syntax on
 filetype plugin indent on
 
 colorscheme vividchalk
+
+" Make tab completion more sane when navigating files
+set wildmode=longest,list,full
+set wildmenu
