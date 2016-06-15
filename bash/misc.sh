@@ -1,3 +1,7 @@
+##
+## Helpers for prompt colorization
+##
+
 # Bad hash function, don't use for anything important!
 function hash_str() {
 	local -r in="$1"
