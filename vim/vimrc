@@ -7,3 +7,7 @@ colorscheme vividchalk
 " Make tab completion more sane when navigating files
 set wildmode=longest,list,full
 set wildmenu
+
+" Disable folding in markdown plugin
+let g:vim_markdown_folding_disabled = 1
+
