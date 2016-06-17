@@ -7,8 +7,6 @@
 	default = simple
 [credential]
 	helper = cache --timeout=3600
-[color]
-	ui = auto
 [alias]
 	co = checkout
 	br = branch
@@ -16,3 +14,23 @@
 	st = status
 [merge]
 	conflictstyle = diff3
+[diff]
+	compactionHeuristic = true
+[color]
+	ui = always
+[color "diff"]
+	meta = yellow bold
+	commit = green bold
+	frag = magenta bold
+	old = red bold
+	new = green bold
+	whitespace = red reverse
+[color "diff-highlight"]
+	oldNormal = red bold
+	oldHighlight = red bold 52
+	newNormal = green bold
+	newHighlight = green bold 22
+[core]
+	pager = diff-so-fancy | less --tabs=4 -RFX
+[interactive]
+	diffFilter = diff-so-fancy | less --tabs=4 -RFX
