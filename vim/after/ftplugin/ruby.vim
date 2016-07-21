@@ -8,3 +8,6 @@ set expandtab
 set autoindent
 
 set textwidth=80
+
+" Line numbers are pretty rad
+set number
