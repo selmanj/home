@@ -2,7 +2,8 @@ execute pathogen#infect()
 syntax on
 filetype plugin indent on
 
-colorscheme vividchalk
+set background=dark
+colorscheme solarized
 
 " Make tab completion more sane when navigating files
 set wildmode=longest,list,full
