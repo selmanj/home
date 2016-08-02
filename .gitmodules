@@ -40,3 +40,6 @@
 [submodule "vim/bundle/ctrlp.vim"]
 	path = vim/bundle/ctrlp.vim
 	url = https://github.com/ctrlpvim/ctrlp.vim
+[submodule "dircolors-solarized"]
+	path = dircolors-solarized
+	url = https://github.com/huyz/dircolors-solarized.git

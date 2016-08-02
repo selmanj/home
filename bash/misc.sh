@@ -1,4 +1,10 @@
 ##
+## Configure dircolors
+##
+
+eval `dircolors ${HOME}/.dir_colors`
+
+##
 ## Helpers for prompt colorization
 ##
 
