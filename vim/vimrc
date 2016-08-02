@@ -15,3 +15,7 @@ let g:vim_markdown_folding_disabled = 1
 " Tabs are useful; let F5 go back in tab, F6 go forward
 nmap <F5> gT
 nmap <F6> gt
+
+" Gimme line numbers, both absolute and relative!
+set relativenumber
+set number
