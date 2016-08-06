@@ -2,7 +2,14 @@
 ## Configure dircolors
 ##
 
-eval `dircolors ${HOME}/.dir_colors`
+if [[ "$(uname -s)" != "Darwin" ]]; then
+    # Use the more powerful dircolors
+    eval `dircolors ${HOME}/.dir_colors`
+else
+    # hardcode the colors we'll use for now
+    export LSCOLORS="gxfxfeaeBxdeheabagacad"
+fi
+
 
 ##
 ## Helpers for prompt colorization
