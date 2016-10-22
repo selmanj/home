@@ -21,6 +21,9 @@
 (setq recentf-max-saved-items 200)
 (setq ido-use-virtual-buffers t)
 
+;; Define list of packages to install
+(setq package-list '(clojure-mode rainbow-delimiters aggressive-indent))
+
 ;; Configure melpa-stable (stay away from melpa, been in trouble too much from that!)
 (require 'package)
 (add-to-list 'package-archives
@@ -30,15 +33,19 @@
   (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
 (package-initialize)
 
+;; If this is a clean install, do a package refresh
+; fetch the list of packages available
+(unless package-archive-contents
+  (package-refresh-contents))
+
+;; List of packages to install goes here
+(dolist (pkg package-list)
+  (unless (package-installed-p pkg)
+    (package-install pkg)))
+
 ;; Require clojure-goodies
-(unless (package-installed-p 'clojure-mode)
-  (package-install 'clojure-mode))
-;; TODO add clj-refactor
 (add-hook 'clojure-mode-hook #'subword-mode)
-(add-hook 'clojure-mode-hook #'paredit-mode)
-(unless (package-installed-p 'rainbow-delimiters)
-  (package-install 'rainbow-delimiters))
-(unless (package-installed-p 'aggressive-indent)
-  (package-install 'aggressive-indent))
+;; TODO decide on paredit or smartparens!
+;; (add-hook 'clojure-mode-hook #'paredit-mode)
 (add-hook 'clojure-mode-hook #'rainbow-delimiters-mode)
 (add-hook 'clojure-mode-hook #'aggressive-indent-mode)
