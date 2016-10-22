@@ -19,3 +19,42 @@ nmap <F6> gt
 " Gimme line numbers, both absolute and relative!
 set relativenumber
 set number
+
+" Use , for leader
+let mapleader = ","
+
+" Heatseeker integration (https://github.com/rschmitt/heatseeker)
+function! HeatseekerCommand(choice_command, hs_args, first_command, rest_command)
+    try
+        let selections = system(a:choice_command . " | hs " . a:hs_args)
+    catch /Vim:Interrupt/
+        redraw!
+        return
+    endtry
+    redraw!
+    let first = 1
+    for selection in split(selections, "\n")
+        if first
+            exec a:first_command . " " . selection
+            let first = 0
+        else
+            exec a:rest_command . " " . selection
+        endif
+    endfor
+endfunction
+
+if has('win32')
+    nnoremap <leader>f :call HeatseekerCommand("dir /a-d /s /b", "", ':e', ':tabe')<CR>
+else
+    nnoremap <leader>f :call HeatseekerCommand("find . ! -path '*/.git/*' -type f -follow", "", ':e', ':tabe')<cr>
+endif
+
+" Using leader w for save is easier to type for me
+nnoremap <leader>w :w<cr>
+" Use leader leader to quickly switch between alternates
+nnoremap <leader><leader> <C-^>
+" Assuming I'm on a mac here
+function! ToClipboard() range
+    echo system('echo '.shellescape(join(getline(a:firstline, a:lastline), "\n")).'| pbcopy')
+endfunction
+vnoremap <leader>y :'<,'>call ToClipboard()<cr>
