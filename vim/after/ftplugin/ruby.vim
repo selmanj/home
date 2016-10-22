@@ -11,3 +11,6 @@ set textwidth=80
 
 " Line numbers are pretty rad
 set number
+
+" older regex engine is faster?
+set re=1
