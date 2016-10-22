@@ -1,9 +1,12 @@
-;; Dark-themes are best
-(load-theme 'tango-dark)
+;; Setup noctilux (a rad theme)
+(add-to-list 'custom-theme-load-path "~/.emacs.d/noctilux-theme")
+(load-theme 'noctilux t)
 
 ;; Set up mac rebindings as advised by http://david.rothlis.net/emacs/osx.html
 (setq mac-command-modifier 'meta)
+
 (global-set-key (kbd "M-`") 'other-frame)
+(global-set-key (kbd "M-o") 'mode-line-other-buffer)
 
 ;; I find sensible defaults very sensible
 (load-file "~/.emacs.d/sensible-defaults.el/sensible-defaults.el")

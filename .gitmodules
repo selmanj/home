@@ -64,3 +64,6 @@
 [submodule "emacs/sensible-defaults.el"]
 	path = emacs/sensible-defaults.el
 	url = https://github.com/hrs/sensible-defaults.el.git
+[submodule "emacs/noctilux-theme"]
+	path = emacs/noctilux-theme
+	url = https://github.com/sjrmanning/noctilux-theme.git
