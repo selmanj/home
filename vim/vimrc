@@ -58,3 +58,14 @@ function! ToClipboard() range
     echo system('echo '.shellescape(join(getline(a:firstline, a:lastline), "\n")).'| pbcopy')
 endfunction
 vnoremap <leader>y :'<,'>call ToClipboard()<cr>
+
+" Lets disable arrow keys for a while to see how comfortable i can get with
+" hjkl
+inoremap  <Up>     <NOP>
+inoremap  <Down>   <NOP>
+inoremap  <Left>   <NOP>
+inoremap  <Right>  <NOP>
+noremap   <Up>     <NOP>
+noremap   <Down>   <NOP>
+noremap   <Left>   <NOP>
+noremap   <Right>  <NOP>
