@@ -41,3 +41,4 @@ ln -n -s "${DIR}/vim/after" "${HOME}/.vim/after"
 # Emacs
 mkdir -p "${HOME}/.emacs.d"
 ln -s "${DIR}/emacs/init.el" "${HOME}/.emacs.d/init.el"
+ln -s "${DIR}/emacs/sensible-defaults.el" "${HOME}/.emacs.d/sensible-defaults.el"

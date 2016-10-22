@@ -61,3 +61,6 @@
 [submodule "vim/bundle/vim-dispatch"]
 	path = vim/bundle/vim-dispatch
 	url = git://github.com/tpope/vim-dispatch.git
+[submodule "emacs/sensible-defaults.el"]
+	path = emacs/sensible-defaults.el
+	url = https://github.com/hrs/sensible-defaults.el.git
