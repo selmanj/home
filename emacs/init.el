@@ -37,11 +37,10 @@
 (package-initialize)
 
 ;; If this is a clean install, do a package refresh
-; fetch the list of packages available
 (unless package-archive-contents
   (package-refresh-contents))
 
-;; List of packages to install goes here
+;; Install list of packages defined earlier
 (dolist (pkg package-list)
   (unless (package-installed-p pkg)
     (package-install pkg)))
