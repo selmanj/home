@@ -25,7 +25,7 @@
 (setq ido-use-virtual-buffers t)
 
 ;; Define list of packages to install
-(setq package-list '(clojure-mode rainbow-delimiters aggressive-indent))
+(setq package-list '(clojure-mode rainbow-delimiters aggressive-indent paredit))
 
 ;; Configure melpa-stable (stay away from melpa, been in trouble too much from that!)
 (require 'package)
@@ -45,9 +45,20 @@
   (unless (package-installed-p pkg)
     (package-install pkg)))
 
+;; Require paredit
+(autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
+(add-hook 'emacs-lisp-mode-hook       #'enable-paredit-mode)
+(add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
+(add-hook 'ielm-mode-hook             #'enable-paredit-mode)
+(add-hook 'lisp-mode-hook             #'enable-paredit-mode)
+(add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
+(add-hook 'scheme-mode-hook           #'enable-paredit-mode)
+
+;; Aggressive indent mode configuration
+(add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
+
 ;; Require clojure-goodies
 (add-hook 'clojure-mode-hook #'subword-mode)
-;; TODO decide on paredit or smartparens!
-;; (add-hook 'clojure-mode-hook #'paredit-mode)
+(add-hook 'clojure-mode-hook #'paredit-mode)
 (add-hook 'clojure-mode-hook #'rainbow-delimiters-mode)
 (add-hook 'clojure-mode-hook #'aggressive-indent-mode)
