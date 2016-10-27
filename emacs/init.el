@@ -25,7 +25,7 @@
 (setq ido-use-virtual-buffers t)
 
 ;; Define list of packages to install
-(setq package-list '(clojure-mode rainbow-delimiters aggressive-indent paredit))
+(setq package-list '(clojure-mode rainbow-delimiters aggressive-indent paredit cider))
 
 ;; Configure melpa-stable (stay away from melpa, been in trouble too much from that!)
 (require 'package)
