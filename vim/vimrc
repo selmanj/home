@@ -1,10 +1,36 @@
 execute pathogen#infect()
-syntax on
-filetype plugin indent on
 
+" Most of these customizations are stolen from Gary Bernhardt's excellent
+" setup:
+" https://github.com/garybernhardt/dotfiles/blob/master/.vimrc
+set nocompatible
+" Allow background buffers
+set hidden
+set showmatch
+set hlsearch
+set ignorecase smartcase
+set switchbuf=useopen
+set showtabline=2
+set winwidth=80
+set scrolloff=3
+set nobackup
+set nowritebackup
+" No more swp files in current directory!
+set directory=~/.vim-tmp,~/tmp,/var/tmp,/tmp
+set showcmd
+set cursorline
 set background=dark
 colorscheme solarized
 
+" Disable new regexp engine on ruby code
+au BufNewFile,BufRead *.rb set re=1
+syntax on
+filetype plugin indent on
+
+set foldmethod=manual
+set nofoldenable
+set nojoinspaces
+set autoread
 " Make tab completion more sane when navigating files
 set wildmode=longest,list,full
 set wildmenu
@@ -12,9 +38,10 @@ set wildmenu
 " Disable folding in markdown plugin
 let g:vim_markdown_folding_disabled = 1
 
-" Tabs are useful; let F5 go back in tab, F6 go forward
-nmap <F5> gT
-nmap <F6> gt
+" Enable italics on the mac
+if has('macunix') || system('uname -o') =~?'^darwin'
+    set t_ZH=[3m t_ZR=[23m "Set the italics code
+endif
 
 " Gimme line numbers, both absolute and relative!
 set relativenumber
@@ -59,6 +86,9 @@ function! ToClipboard() range
 endfunction
 vnoremap <leader>y :'<,'>call ToClipboard()<cr>
 
+" leader h clears highlighting
+nnoremap <leader>h :noh<cr>
+
 " Lets disable arrow keys for a while to see how comfortable i can get with
 " hjkl
 inoremap  <Up>     <NOP>
@@ -69,3 +99,16 @@ noremap   <Up>     <NOP>
 noremap   <Down>   <NOP>
 noremap   <Left>   <NOP>
 noremap   <Right>  <NOP>
+
+" TODO: This was stolen from the internet and works ok, but it'd be nicer if it
+" worked with vim-surround
+" modify selected text using combining diacritics
+command! -range -nargs=0 Overline        call s:CombineSelection(<line1>, <line2>, '0305')
+command! -range -nargs=0 Underline       call s:CombineSelection(<line1>, <line2>, '0332')
+command! -range -nargs=0 DoubleUnderline call s:CombineSelection(<line1>, <line2>, '0333')
+command! -range -nargs=0 Strikethrough   call s:CombineSelection(<line1>, <line2>, '0336')
+
+function! s:CombineSelection(line1, line2, cp)
+  execute 'let char = "\u'.a:cp.'"'
+  execute a:line1.','.a:line2.'s/\%V[^[:cntrl:]]/&'.char.'/ge'
+endfunction
