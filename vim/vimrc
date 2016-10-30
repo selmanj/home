@@ -115,3 +115,61 @@ function! s:CombineSelection(line1, line2, cp)
   execute 'let char = "\u'.a:cp.'"'
   execute a:line1.','.a:line2.'s/\%V[^[:cntrl:]]/&'.char.'/ge'
 endfunction
+
+function! RunRubyTest(file_path, extra_args)
+  let l:cmd_to_run = "ruby -Ilib:test " . a:file_path . " " . a:extra_args
+  let s:last_ruby_test_cmd = l:cmd_to_run
+  exe "!echo '+ " . l:cmd_to_run . "' && " l:cmd_to_run
+endfunction
+
+function! RunLastRubyTest()
+  if !defined("s:last_ruby_test_cmd")
+    echom "No last run ruby test command."
+    return 0
+  endif
+  exe "!echo '+ " . s:last_ruby_test_cmd . "' && " s:last_ruby_test_cmd
+endfunction
+
+" Attempt to find the current test name via a not-very-smart regex. Returns the
+" test name (or crashes horribly if it fails)
+function! MatchRubyTestAtCursor()
+  " Save location
+  let l:start_view = winsaveview()
+  " Search for the nearest test function name
+  execute "normal! ?\\Wdef\\s\\+test_[A-Za-z0-9_!?=]\\+\r:nohlsearch\r"
+  " Before capturing result to j register, save any existing value
+  let l:last_reg = @j
+  " Move cursor to the actual function name and yank to j register
+  normal! wwve"jy
+  " Read from "j", then restore it to previous value
+  let l:test_name = @j
+  let @j = l:last_reg
+  " Reset the window view, and return the name
+  call winrestview(l:start_view)
+  return l:test_name
+endfunction
+
+" Find the ruby test at the cursor and run it
+function! RunRubyTestAtCursor()
+  let l:test_name = MatchRubyTestAtCursor()
+  call RunRubyTest(shellescape(expand("%:p")), "--name '" . l:test_name . "'")
+endfunction
+
+" Try to find the ruby test at the cursor; if the file is not a ruby test file,
+" instead run the last test.
+function! RunRubyTestAtCursorOrLastTest()
+  if match(expand("%:t"), "test.*\.rb") != -1
+    " Looks like a test file! Let's call run test at cursor
+    return RunRubyTestAtCursor()
+  endif
+  return RunLastRubyTest()
+endfunction
+
+" Run all ruby tests in current file
+function! RunAllRubyTests()
+  call RunRubyTest(shellescape(expand("%:p")), "")
+endfunction
+
+nnoremap <leader>ta :call RunAllRubyTests()<cr>
+nnoremap <leader>tc :call RunTestAtCursor()<cr>
+nnoremap <leader>tt :call RunRubyTestAtCursorOrLastTest()<cr>
