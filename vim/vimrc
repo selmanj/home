@@ -47,8 +47,8 @@ endif
 set relativenumber
 set number
 
-" Use , for leader
 let mapleader = ","
+let maplocalleader = "\\"
 
 " Heatseeker integration (https://github.com/rschmitt/heatseeker)
 function! HeatseekerCommand(choice_command, hs_args, first_command, rest_command)
@@ -88,6 +88,9 @@ vnoremap <leader>y :'<,'>call ToClipboard()<cr>
 
 " leader h clears highlighting
 nnoremap <leader>h :noh<cr>
+
+nnoremap <leader>ev :vsplit $MYVIMRC<cr>
+nnoremap <leader>sv :source $MYVIMRC<cr>
 
 " Lets disable arrow keys for a while to see how comfortable i can get with
 " hjkl
