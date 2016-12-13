@@ -1,6 +1,8 @@
+;;; rwd-bell --- Summary:
+;; Get rid of that annoying bell!
+;;; Commentary:
 ;; Shamelessly stolen from http://www.zenspider.com/ruby/2013/06/my-emacs-setup-sanity.html
-;;
-;; Original contents follows
+;; Might be modifieid a bit...
 
 ;; found at http://www.elliotglaysher.org/emacs/
 
@@ -9,6 +11,7 @@
 ;; -----------------------------------------------------------------------
 ;; nice little alternative visual bell; Miles Bader <miles /at/ gnu.org>
 
+;;; Code:
 ;; TODO(erg): Figure out why that note doesn't appear in the mode-line-bar...
 (defcustom mode-line-bell-string "ding" ; "♪"
   "Message displayed in mode-line by `mode-line-bell' function."
@@ -31,7 +34,6 @@ right margin.  The string is displayed for `mode-line-bell-delay'
 seconds.
 
 This function is intended to be used as a value of `ring-bell-function'."
-
   (unless (equal mode-line-bell-string mode-line-bell-cached-string)
     (setq mode-line-bell-propertized-string
           (propertize
@@ -49,3 +51,5 @@ This function is intended to be used as a value of `ring-bell-function'."
 
 ;;;###autoload
 (setq ring-bell-function 'mode-line-bell)
+(provide 'rwd-bell)
+;;; rwd-bell.el ends here

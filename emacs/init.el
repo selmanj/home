@@ -1,64 +1,306 @@
-;; Setup noctilux (a rad theme)
+;;; init.el --- Joe's personal emacs setup
+
+;; Update our load path to include any custom modules
+(add-to-list 'load-path (directory-file-name "~/.emacs.d/elisp"))
+
+;; Setup theme first to avoid annoying window flashes on load
 (add-to-list 'custom-theme-load-path "~/.emacs.d/noctilux-theme")
 (load-theme 'noctilux t)
+
+;;; Now tune up emacs:
+;; Set the default directory to home
+(setq default-directory "~/")
+
+;; Gimme 20mb of GC (number chosen out of thin air)
+(setq gc-cons-threshold 20000000)
+
+;; Keep backups from cluttering up the filesystem
+(setq backup-directory-alist
+      `((".*" . ,temporary-file-directory)))
+
+;; Delete all trailing whitespace on save
+(add-hook 'before-save-hook #'delete-trailing-whitespace)
+
+;; Always follow symlinks already
+(setq vc-follow-symlinks t)
+
+;; Save files starting with #! as executable
+(add-hook 'after-save-hook
+	  #'executable-make-buffer-file-executable-if-script-p)
+
+;; Get that typewriter out of here
+(setq sentence-end-double-space nil)
+
+;; I think this is always enabled, but if not let's turn it on
+(transient-mark-mode t)
+
+;; Files should end in new line
+(setq require-final-newline t)
+
+;; Ask before closing emacs
+(setq confirm-kill-emacs 'y-or-n-p)
+
+;; On that note, use y-or-n-p everywhere
+(fset 'yes-or-no-p 'y-or-n-p)
+
+;; Keep buffers up to date
+(global-auto-revert-mode t)
+
+;; NO BELL UGH
+(setq visible-bell t)
+
+;; Default line length is 80
+(setq-default fill-column 80)
+
+;; Human-readable file sizes
+(setq-default dired-listing-switches "-alh")
 
 ;; Set up mac rebindings as advised by http://david.rothlis.net/emacs/osx.html
 (setq mac-command-modifier 'meta)
 
-(global-set-key (kbd "M-`") 'other-frame)
-(global-set-key (kbd "M-o") 'mode-line-other-buffer)
+;; Force tab to indent, then run complete commands if already indented
+(setq tab-always-indent 'complete)
 
-;; I find sensible defaults very sensible
-(load-file "~/.emacs.d/sensible-defaults.el/sensible-defaults.el")
-(sensible-defaults/use-all-settings)
-(sensible-defaults/use-all-keybindings)
+;; Not a fan of the scrollbars or the toolbar
+(scroll-bar-mode -1)
+(tool-bar-mode -1)
 
-;; Fix that annoying bell
-(load-file "~/.emacs.d/rwd-bell.el")
+;;; LOCAL PACKAGES
+(require 'rwd-bell)
 
-;; Ido mode and recentf seem pretty sweet
-(ido-mode t)
-(setq ido-enable-flex-matching t)
-(require 'recentf)
-(recentf-mode t)
-(setq recentf-max-saved-items 200)
-(setq ido-use-virtual-buffers t)
-
-;; Define list of packages to install
-(setq package-list '(clojure-mode rainbow-delimiters aggressive-indent paredit cider))
-
-;; Configure melpa-stable (stay away from melpa, been in trouble too much from that!)
+;;; NON-LOCAL PACKAGES
+;; Set up package initialization
 (require 'package)
+(setq package-enable-at-startup nil)
+(add-to-list 'package-archives
+	     '("melpa" . "https://melpa.org/packages/") t)
 (add-to-list 'package-archives
              '("melpa-stable" . "https://stable.melpa.org/packages/") t)
-(when (< emacs-major-version 24)
-  ;; For important compatibility libraries like cl-lib
-  (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
 (package-initialize)
 
-;; If this is a clean install, do a package refresh
-(unless package-archive-contents
-  (package-refresh-contents))
+;; Ensure that use-package is installed (if it's not, refresh and install)
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
 
-;; Install list of packages defined earlier
-(dolist (pkg package-list)
-  (unless (package-installed-p pkg)
-    (package-install pkg)))
+(eval-when-compile
+ (require 'use-package))
+(require 'bind-key)
 
-;; Require paredit
-(autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
-(add-hook 'emacs-lisp-mode-hook       #'enable-paredit-mode)
-(add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
-(add-hook 'ielm-mode-hook             #'enable-paredit-mode)
-(add-hook 'lisp-mode-hook             #'enable-paredit-mode)
-(add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
-(add-hook 'scheme-mode-hook           #'enable-paredit-mode)
+;; Ensure that all packages mentioned in use-package are installed
+(setq use-package-always-ensure t)
+(setq use-package-verbose t)
 
-;; Aggressive indent mode configuration
-(add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
+;; Any generic shortcuts go here
+(use-package bind-key
+  :config
+  (bind-key "M-`" #'other-frame)
+  (bind-key "M-o" #'other-window)
+  (bind-key "C-x C-m" #'execute-extended-command)
+  (bind-key "C-c C-m" #'execute-extended-command)
+  (bind-key "C-w" #'backward-kill-word)
+  (bind-key "C-x C-w" #'kill-region)
+  (bind-key "C-c C-w" #'kill-region))
 
-;; Require clojure-goodies
-(add-hook 'clojure-mode-hook #'subword-mode)
-(add-hook 'clojure-mode-hook #'paredit-mode)
-(add-hook 'clojure-mode-hook #'rainbow-delimiters-mode)
-(add-hook 'clojure-mode-hook #'aggressive-indent-mode)
+(use-package paren
+  :config
+  (show-paren-mode t)
+  (setq show-paren-delay 0.0))
+
+(use-package exec-path-from-shell
+  :if (memq window-system '(mac ns))
+  :config
+  (exec-path-from-shell-initialize))
+
+(use-package yaml-mode
+  :mode "\\.yml")
+
+(use-package enh-ruby-mode
+  :mode "\\(?:\\.rb\\|ru\\|rake\\|thor\\|jbuilder\\|gemspec\\|podspec\\|/\\(?:Gem\\|Rake\\|Cap\\|Thor\\|Vagrant\\|Guard\\|Pod\\)file\\)\\'"
+  :interpreter ("ruby" "ruby1.9" "ruby1.8" "jruby" "rbx")
+  :init
+  (add-hook 'enh-ruby-mode-hook #'eldoc-mode)
+  :config
+  (setq enh-ruby-deep-indent-paren nil)) ; Turns off strange indenting on hashes
+
+(use-package markdown-mode
+  :commands (markdown-mode gfm-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :config
+  (setq markdown-command "multimarkdown"))
+
+(use-package inf-ruby
+  :init
+  (add-hook 'enh-ruby-mode-hook #'inf-ruby-minor-mode)
+  (add-hook 'compilation-filter-hook #'inf-ruby-auto-enter))
+
+(use-package yard-mode
+  :init
+  (add-hook 'enh-ruby-mode-hook #'yard-mode))
+
+(use-package nyan-mode
+  :config
+  (setq nyan-animate-nyancat t)
+  (setq nyan-wavy-trail t)
+  (nyan-mode))
+
+(use-package company
+  :config
+  (global-company-mode)
+  (bind-key "C-w" 'backward-kill-word company-active-map)
+  (bind-key "<tab>"
+	    (lambda ()
+	      (interactive)
+	      (if (looking-at "\\_>")
+		  (company-complete-common)
+		(indent-according-to-mode)))
+	    company-active-map))
+
+(use-package company-inf-ruby)
+
+(use-package smartparens
+  :init
+  (add-hook 'emacs-lisp-mode-hook #'smartparens-strict-mode)
+  (add-hook 'clojure-mode-hook #'smartparens-strict-mode)
+  (add-hook 'enh-ruby-mode-hook #'smartparens-mode)
+  :config
+  (require 'smartparens-config)
+  (sp-use-smartparens-bindings))	; Doesn't seem to work? Should add custom bindings anyway
+
+(use-package ag)
+
+(use-package ace-window
+  :bind (("M-p" . ace-window))
+  :config
+  (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
+
+(use-package org
+  :bind (("C-c l" . org-store-link)
+	 ("C-c a" . org-agenda)
+	 ("C-c c" . org-capture))
+  :config
+  (setq org-special-ctrl-a/e t)
+  (setq org-todo-keywords
+	'((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)")))
+  (setq org-log-done 'time)
+  (setq org-agenda-files '("~/org/todo.org")))
+
+(use-package projectile
+  :config
+  (projectile-mode))
+
+(use-package whole-line-or-region)
+
+(use-package flycheck
+  :init
+  (add-hook 'after-init-hook #'global-flycheck-mode)
+  :config
+  (setq flycheck-emacs-lisp-load-path 'inherit))
+
+(use-package robe
+  :init
+  (add-hook 'enh-ruby-mode-hook 'robe-mode)
+  (eval-after-load 'company
+    '(push 'company-robe company-backends)))
+
+(use-package minitest
+  :init
+  (add-hook 'enh-ruby-mode-hook 'minitest-mode))
+
+(use-package yasnippet
+  :config
+  (yas-global-mode 1))
+
+(use-package clojure-mode
+  :init
+  (add-hook 'clojure-mode-hook #'subword-mode)
+  :config
+  (put-clojure-indent 's/fdef 1))
+
+(use-package clj-refactor
+  :init
+  (add-hook 'clojure-mode-hook (lambda ()
+				 (clj-refactor-mode 1)
+				 (yas-minor-mode 1)
+				 (cljr-add-keybindings-with-prefix "C-c C-m")))) ;TODO: use bind-key here
+
+(use-package clojure-cheatsheet)
+
+(use-package rainbow-delimiters
+  :init
+  (add-hook 'clojure-mode-hook #'rainbow-delimiters-mode)
+  (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode))
+
+(use-package aggressive-indent
+  :init
+  (add-hook 'clojure-mode-hook #'aggressive-indent-mode)
+  (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode))
+
+(use-package cider
+  :init
+  (add-hook 'cider-repl-mode-hook #'smartparens-strict-mode))
+
+(use-package which-key
+  :config
+  (which-key-mode))
+
+(use-package flx-ido
+  :config
+  (flx-ido-mode t)
+  (setq ido-use-faces nil))
+
+(use-package ido-completing-read+)
+
+(use-package magit
+  :bind (("C-x g" . magit-status)
+	 ("C-x M-g" . magit-dispatch-popup))
+  :config
+  (add-hook 'after-save-hook 'magit-after-save-refresh-status)
+  (setq magit-completing-read-function 'magit-ido-completing-read))
+
+(use-package avy
+  :bind* (("C-:" . avy-goto-word-or-subword-1)))
+
+(use-package ido
+  :config
+  (ido-mode t)
+  (setq ido-enable-flex-matching t)
+  (setq ido-everywhere t)
+  (setq ido-use-virtual-buffers t))
+
+(use-package ido-vertical-mode
+  :config
+  (ido-vertical-mode 1)
+  (setq ido-vertical-define-keys 'C-n-and-C-p-only))
+
+(use-package recentf
+  :config
+  (recentf-mode t)
+  (setq recentf-max-saved-items 200))
+
+(use-package winner
+  :config
+  (winner-mode 1))
+
+(use-package goto-last-change
+  :bind (("C-'" . goto-last-change)))
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("4e753673a37c71b07e3026be75dc6af3efbac5ce335f3707b7d6a110ecb636a3" default)))
+ '(package-selected-packages
+   (quote
+    (ido-completing-read+ zenburn-theme ido-vertical-mode markdown-mode yaml-mode clj-refactor ace-window goto-last-change emacs-sensible use-package-chords use-package avy enh-ruby-mode company-inf-ruby yasnippet minitest ruby-compilation ruby-test-mode robe inf-ruby flycheck whole-line-or-region org ag exec-path-from-shell yard-mode which-key smartparens rainbow-delimiters projectile paredit nyan-mode magit flx-ido company clojure-cheatsheet aggressive-indent))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(org-todo ((t (:background "#202020" :foreground "#ccaaff" :inverse-video nil :underline nil :slant normal :weight bold)))))
