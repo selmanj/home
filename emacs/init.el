@@ -173,7 +173,7 @@
   (add-hook 'enh-ruby-mode-hook #'smartparens-mode)
   :config
   (require 'smartparens-config)
-  (sp-use-smartparens-bindings))	; Doesn't seem to work? Should add custom bindings anyway
+  (sp-use-smartparens-bindings))
 
 (use-package ag)
 
