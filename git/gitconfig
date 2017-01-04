@@ -17,7 +17,7 @@
 [diff]
 	compactionHeuristic = true
 [color]
-	ui = always
+	ui = true
 [color "diff"]
 	meta = yellow bold
 	commit = green bold
