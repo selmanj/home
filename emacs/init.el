@@ -8,7 +8,7 @@
 (load-theme 'noctilux t)
 
 ;; I dig the Fira Code font
-(set-frame-font "Fira Code" nil t)
+(set-frame-font "Fira Code:style=Retina" nil t)
 
 ;; Also enable ligatures
 (mac-auto-operator-composition-mode)
