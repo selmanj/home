@@ -198,6 +198,10 @@
   :config
   (projectile-mode))
 
+(use-package projectile-rails
+  :config
+  (projectile-rails-global-mode))
+
 (use-package whole-line-or-region)
 
 (use-package flycheck
@@ -211,6 +215,13 @@
   (add-hook 'enh-ruby-mode-hook 'robe-mode)
   (eval-after-load 'company
     '(push 'company-robe company-backends)))
+
+(use-package web-mode
+  :init
+  (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+  :config
+  (setq web-mode-markup-indent-offset 2)
+  (setq web-mode-code-indent-offset 2))
 
 (use-package minitest
   :init
