@@ -127,7 +127,8 @@
   :init
   (add-hook 'enh-ruby-mode-hook #'eldoc-mode)
   :config
-  (setq enh-ruby-deep-indent-paren nil)) ; Turns off strange indenting on hashes
+  ;; (setq enh-ruby-deep-indent-paren nil)
+  ) ; Turns off strange indenting on hashes
 
 (use-package markdown-mode
   :commands (markdown-mode gfm-mode)
