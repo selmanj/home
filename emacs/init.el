@@ -258,7 +258,9 @@
 
 (use-package cider
   :init
-  (add-hook 'cider-repl-mode-hook #'smartparens-strict-mode))
+  (add-hook 'cider-repl-mode-hook #'smartparens-strict-mode)
+  :config
+  (setq cider-prompt-for-symbol nil))
 
 (use-package which-key
   :config
