@@ -20,9 +20,11 @@
 ;; Gimme 20mb of GC (number chosen out of thin air)
 (setq gc-cons-threshold 20000000)
 
-;; Keep backups from cluttering up the filesystem
+;; Keep backups and autosaves from cluttering up the filesystem
 (setq backup-directory-alist
       `((".*" . ,temporary-file-directory)))
+(setq auto-save-file-name-transforms
+      `((".*" ,temporary-file-directory t)))
 
 ;; Delete all trailing whitespace on save
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
