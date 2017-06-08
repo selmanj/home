@@ -57,6 +57,8 @@
 ;; NO BELL UGH
 (setq visible-bell t)
 
+(toggle-frame-maximized)
+
 ;; Default line length is 80
 (setq-default fill-column 80)
 
