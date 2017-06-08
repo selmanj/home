@@ -180,7 +180,9 @@
   (require 'smartparens-config)
   (sp-use-smartparens-bindings))
 
-(use-package ag)
+(use-package ag
+  :config
+  (setq ag-highlight-search t))
 
 (use-package ace-window
   :bind (("M-p" . ace-window))
