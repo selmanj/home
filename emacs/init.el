@@ -3,6 +3,15 @@
 ;; Update our load path to include any custom modules
 (add-to-list 'load-path (directory-file-name "~/.emacs.d/elisp"))
 
+(require 'face-remap)
+
+;; Define any local functions here
+(defun my-org-buffer-mode-face-custom ()
+  "Set org mode to a font without ligatures."
+  (interactive)
+  (setq buffer-face-mode-face '(:family "Helvetica Neue" :height 150))
+  (buffer-face-mode))
+
 ;; Setup theme first to avoid annoying window flashes on load
 (add-to-list 'custom-theme-load-path "~/.emacs.d/noctilux-theme")
 (load-theme 'noctilux t)
@@ -193,6 +202,8 @@
   :bind (("C-c l" . org-store-link)
 	 ("C-c a" . org-agenda)
 	 ("C-c c" . org-capture))
+  :init
+  (add-hook 'org-mode-hook #'my-org-buffer-mode-face-custom)
   :config
   (setq org-special-ctrl-a/e t)
   (setq org-todo-keywords
