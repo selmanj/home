@@ -168,6 +168,10 @@
 
 (use-package company
   :config
+  (setq company-tooltip-limit 20)                      ; bigger popup window
+  (setq company-idle-delay .3)                         ; decrease delay before autocompletion popup shows
+  (setq company-echo-delay 0)                          ; remove annoying blinking
+  (setq company-begin-commands '(self-insert-command)) ; start autocompletion only after typing
   (global-company-mode)
   (bind-key "C-w" 'backward-kill-word company-active-map)
   (bind-key "<tab>"
@@ -179,6 +183,10 @@
 	    company-active-map))
 
 (use-package company-inf-ruby)
+(use-package company-go
+  :init
+  (eval-after-load 'company
+    '(push 'company-go company-backends)))
 
 (use-package smartparens
   :init
@@ -328,6 +336,17 @@
   :config
   (global-rbenv-mode))
 
+(use-package go-mode
+  :init
+  (add-hook 'go-mode-hook (lambda ()
+			    (setq tab-width 4)))
+  :config
+  (add-hook 'before-save-hook 'gofmt-before-save))
+
+(use-package go-eldoc
+  :init
+  (add-hook 'go-mode-hook 'go-eldoc-setup))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -342,7 +361,7 @@
  '(foreground-color "#cccccc")
  '(package-selected-packages
    (quote
-    (buffer-move projectile-rails web-mode rbenv evil-search-highlight-persist default-text-scale evil-visual-mark-mode fill-column-indicator sos ido-completing-read+ zenburn-theme ido-vertical-mode markdown-mode yaml-mode clj-refactor ace-window goto-last-change emacs-sensible use-package-chords use-package avy enh-ruby-mode company-inf-ruby yasnippet minitest ruby-compilation ruby-test-mode robe inf-ruby flycheck whole-line-or-region org ag exec-path-from-shell yard-mode which-key smartparens rainbow-delimiters projectile paredit nyan-mode magit flx-ido company clojure-cheatsheet aggressive-indent))))
+    (go-eldoc go-mode buffer-move projectile-rails web-mode rbenv evil-search-highlight-persist default-text-scale evil-visual-mark-mode fill-column-indicator sos ido-completing-read+ zenburn-theme ido-vertical-mode markdown-mode yaml-mode clj-refactor ace-window goto-last-change emacs-sensible use-package-chords use-package avy enh-ruby-mode company-inf-ruby yasnippet minitest ruby-compilation ruby-test-mode robe inf-ruby flycheck whole-line-or-region org ag exec-path-from-shell yard-mode which-key smartparens rainbow-delimiters projectile paredit nyan-mode magit flx-ido company clojure-cheatsheet aggressive-indent))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
