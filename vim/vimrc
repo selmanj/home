@@ -20,7 +20,7 @@ set directory=~/.vim-tmp,~/tmp,/var/tmp,/tmp
 set showcmd
 set cursorline
 set background=dark
-colorscheme solarized
+colorscheme lighttable
 
 " Disable new regexp engine on ruby code
 au BufNewFile,BufRead *.rb set re=1
