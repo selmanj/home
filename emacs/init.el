@@ -19,8 +19,9 @@
 ;; I dig the Fira Code font
 (set-frame-font "Fira Code:style=Retina" nil t)
 
-;; Also enable ligatures
-(mac-auto-operator-composition-mode)
+;; Also enable ligatures on mac
+(if (fboundp 'mac-auto-operator-composition-mode)
+  (mac-auto-operator-composition-mode))
 
 ;;; Now tune up emacs:
 ;; Set the default directory to home
