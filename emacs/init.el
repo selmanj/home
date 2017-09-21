@@ -85,6 +85,7 @@
 
 ;; Set up mac rebindings as advised by http://david.rothlis.net/emacs/osx.html
 (setq mac-command-modifier 'meta)
+(setq mac-option-modifier 'meta)
 
 ;; Force tab to indent, then run complete commands if already indented
 (setq tab-always-indent 'complete)
@@ -200,14 +201,18 @@
   (eval-after-load 'company
     '(push 'company-go company-backends)))
 
-(use-package smartparens
+(use-package paredit
   :init
-  (add-hook 'emacs-lisp-mode-hook #'smartparens-strict-mode)
-  (add-hook 'clojure-mode-hook #'smartparens-strict-mode)
-  (add-hook 'enh-ruby-mode-hook #'smartparens-mode)
+  (add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode)
+  (add-hook 'clojure-mode-hook #'enable-paredit-mode))
+
+(use-package eldoc
   :config
-  (require 'smartparens-config)
-  (sp-use-smartparens-bindings))
+  (eldoc-add-command
+   'paredit-backward-delete
+   'paredit-close-round))
+
+(use-package lispy)
 
 (use-package ag
   :config
@@ -277,7 +282,8 @@
   :init
   (add-hook 'clojure-mode-hook #'subword-mode)
   :config
-  (put-clojure-indent 's/fdef 1))
+  (put-clojure-indent 's/fdef 1)
+  (setq clojure-align-forms-automatically t))
 
 (use-package clj-refactor
   :init
@@ -300,7 +306,7 @@
 
 (use-package cider
   :init
-  (add-hook 'cider-repl-mode-hook #'smartparens-strict-mode)
+  (add-hook 'cider-repl-mode-hook #'paredit-mode)
   :config
   (setq cider-prompt-for-symbol nil))
 
