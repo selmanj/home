@@ -27,7 +27,7 @@ ln -s "${DIR}/dircolors-solarized/dircolors.ansi-universal" "${HOME}/.dir_colors
 
 # Bash helpers
 ln -s "${DIR}/bash/aliases.sh" "${HOME}/.aliases.sh"
-add_line_if_missing "source ~/.aliases.sh" "${HOME}/.bash_profile"
+add_line_if_missing "source ~/.aliases.sh" "${HOME}/.bashrc"
 ln -s "${DIR}/bash/misc.sh" "${HOME}/.misc.sh"
 
 # Vim helpers
