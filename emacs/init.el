@@ -5,23 +5,31 @@
 
 (require 'face-remap)
 
+;; Global settings (defaults)
+					;
 ;; Define any local functions here
 (defun my-org-buffer-mode-face-custom ()
   "Set org mode to a font without ligatures."
   (interactive)
-  (setq buffer-face-mode-face '(:family "Helvetica Neue" :height 150))
+  (setq buffer-face-mode-face '(:family "Menlo"))
   (buffer-face-mode))
 
+(defun neotree-project-dir ()
+  "Open NeoTree using the git root."
+  (interactive)
+  (let ((project-dir (projectile-project-root))
+	(file-name (buffer-file-name)))
+    (neotree-toggle)
+    (if project-dir
+	(if (neo-global--window-exists-p)
+	    (progn
+	      (neotree-dir project-dir)
+	      (neotree-find file-name)))
+      (message "Could not find git project root."))))
+
 ;; Setup theme first to avoid annoying window flashes on load
-(add-to-list 'custom-theme-load-path "~/.emacs.d/noctilux-theme")
-(load-theme 'noctilux t)
-
-;; I dig the Fira Code font
-(set-frame-font "Fira Code:style=Retina" nil t)
-
-;; Also enable ligatures on mac
-(if (fboundp 'mac-auto-operator-composition-mode)
-  (mac-auto-operator-composition-mode))
+;;(add-to-list 'custom-theme-load-path "~/.emacs.d/noctilux-theme")
+;;(load-theme 'noctilux t)
 
 ;;; Now tune up emacs:
 ;; Set the default directory to home
@@ -122,6 +130,8 @@
   (bind-key "C-x C-w" #'kill-region)
   (bind-key "C-c C-w" #'kill-region))
 
+(use-package delight)
+
 (use-package paren
   :config
   (show-paren-mode t)
@@ -168,6 +178,7 @@
   (nyan-mode))
 
 (use-package company
+  :diminish company-mode
   :config
   (setq company-tooltip-limit 20)                      ; bigger popup window
   (setq company-idle-delay .3)                         ; decrease delay before autocompletion popup shows
@@ -221,6 +232,7 @@
   (setq org-agenda-files '("~/org/todo.org")))
 
 (use-package projectile
+  :delight '(:eval (concat " " (projectile-project-name)))
   :config
   (projectile-mode))
 
@@ -254,6 +266,7 @@
   (add-hook 'enh-ruby-mode-hook 'minitest-mode))
 
 (use-package yasnippet
+  :delight yas
   :config
   (yas-global-mode 1))
 
@@ -335,7 +348,8 @@
 
 (use-package rbenv
   :config
-  (global-rbenv-mode))
+  ;; (global-rbenv-mode)
+  )
 
 (use-package go-mode
   :init
@@ -348,24 +362,53 @@
   :init
   (add-hook 'go-mode-hook 'go-eldoc-setup))
 
+(use-package dumb-jump
+  :bind (("M-g o" . dumb-jump-go-other-window)
+         ("M-g j" . dumb-jump-go)
+	 ("M-g b" . dumb-jump-back)
+         ("M-g i" . dumb-jump-go-prompt)
+         ("M-g x" . dumb-jump-go-prefer-external)
+         ("M-g z" . dumb-jump-go-prefer-external-other-window))
+  :init
+  (dumb-jump-mode))
+
+(use-package all-the-icons)
+
+(use-package neotree
+  :bind (("<f8>" . neotree-project-dir))
+  :config
+  (setq projectile-switch-project-action 'neotree-projectile-action))
+
+(use-package terraform-mode)
+
+(use-package doom-themes
+  :config
+  (load-theme 'doom-one t)
+  (setq doom-themes-enable-bold t)
+  (setq doom-themes-enable-italic t)
+  (doom-themes-visual-bell-config)
+  (doom-themes-neotree-config)
+  (doom-themes-org-config)
+  ;; I dig the Fira Code font
+  (set-frame-font "Fira Code:style=Retina" nil t)
+
+  ;; Also enable ligatures
+  (if (fboundp 'mac-auto-operator-composition-mode)
+    (mac-auto-operator-composition-mode)))
+
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(background-color "#202020")
- '(background-mode dark)
- '(cursor-color "#cccccc")
+
+
+
  '(custom-safe-themes
    (quote
     ("0c311fb22e6197daba9123f43da98f273d2bfaeeaeb653007ad1ee77f0003037" "14f0fbf6f7851bfa60bf1f30347003e2348bf7a1005570fd758133c87dafe08f" "4e753673a37c71b07e3026be75dc6af3efbac5ce335f3707b7d6a110ecb636a3" default)))
- '(foreground-color "#cccccc")
+
  '(package-selected-packages
    (quote
-    (go-eldoc go-mode buffer-move projectile-rails web-mode rbenv evil-search-highlight-persist default-text-scale evil-visual-mark-mode fill-column-indicator sos ido-completing-read+ zenburn-theme ido-vertical-mode markdown-mode yaml-mode clj-refactor ace-window goto-last-change emacs-sensible use-package-chords use-package avy enh-ruby-mode company-inf-ruby yasnippet minitest ruby-compilation ruby-test-mode robe inf-ruby flycheck whole-line-or-region org ag exec-path-from-shell yard-mode which-key smartparens rainbow-delimiters projectile paredit nyan-mode magit flx-ido company clojure-cheatsheet aggressive-indent))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(org-todo ((t (:background "#202020" :foreground "#ccaaff" :inverse-video nil :underline nil :slant normal :weight bold)))))
+    (delight neotree doom-themes dumb-jump go-eldoc go-mode buffer-move projectile-rails web-mode rbenv evil-search-highlight-persist default-text-scale evil-visual-mark-mode fill-column-indicator sos ido-completing-read+ zenburn-theme ido-vertical-mode markdown-mode yaml-mode clj-refactor ace-window goto-last-change emacs-sensible use-package-chords use-package avy enh-ruby-mode company-inf-ruby yasnippet minitest ruby-compilation ruby-test-mode robe inf-ruby flycheck whole-line-or-region org ag exec-path-from-shell yard-mode which-key smartparens rainbow-delimiters projectile paredit nyan-mode magit flx-ido company clojure-cheatsheet aggressive-indent))))
