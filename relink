@@ -23,7 +23,8 @@ ln -s "${DIR}/git/git-customizations.sh" "${HOME}/.git-customizations.sh"
 add_line_if_missing "source ~/.git-customizations.sh" "${HOME}/.bashrc"
 
 # Solarized dircolors support
-ln -s "${DIR}/dircolors-solarized/dircolors.ansi-universal" "${HOME}/.dir_colors"
+# Commenting out for now as I'm not so hot on solarized lately
+#ln -s "${DIR}/dircolors-solarized/dircolors.ansi-universal" "${HOME}/.dir_colors"
 
 # Bash helpers
 ln -s "${DIR}/bash/aliases.sh" "${HOME}/.aliases.sh"

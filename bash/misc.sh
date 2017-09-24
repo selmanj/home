@@ -2,7 +2,7 @@
 ## Configure dircolors
 ##
 
-if [[ "$(uname -s)" != "Darwin" ]]; then
+if [[ "$(uname -s)" != "Darwin" && -e "${HOME}/.dir_colors" ]]; then
     # Use the more powerful dircolors
     eval `dircolors ${HOME}/.dir_colors`
 else
