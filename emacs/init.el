@@ -229,7 +229,10 @@
   (setq org-todo-keywords
 	'((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)")))
   (setq org-log-done 'time)
-  (setq org-agenda-files '("~/org/todo.org")))
+  (setq org-agenda-files '("~/org/todo.org"))
+  (setq org-capture-templates
+	'(("t" "Todo" entry (file+olp "~/org/todo.org" "Tasks" "Captured")
+	   "* TODO %?\n  %i\n  %a"))))
 
 (use-package projectile
   :delight '(:eval (concat " " (projectile-project-name)))
