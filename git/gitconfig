@@ -20,3 +20,5 @@
 	ui = true
 [core]
 	editor = vim
+[magit]
+	hideCampaign = true
