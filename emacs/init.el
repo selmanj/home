@@ -274,7 +274,7 @@
   (add-hook 'enh-ruby-mode-hook 'minitest-mode))
 
 (use-package yasnippet
-  :delight yas
+  :delight
   :config
   (yas-global-mode 1))
 
