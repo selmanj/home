@@ -336,7 +336,8 @@
   (ido-mode t)
   (setq ido-enable-flex-matching t)
   (setq ido-everywhere t)
-  (setq ido-use-virtual-buffers t))
+  (setq ido-use-virtual-buffers t)
+  (setq ido-auto-merge-work-directories-length -1))
 
 (use-package ido-vertical-mode
   :config
@@ -406,7 +407,7 @@
 
   ;; Also enable ligatures
   (if (fboundp 'mac-auto-operator-composition-mode)
-    (mac-auto-operator-composition-mode)))
+      (mac-auto-operator-composition-mode)))
 
 
 (custom-set-variables
