@@ -409,6 +409,33 @@
   (if (fboundp 'mac-auto-operator-composition-mode)
       (mac-auto-operator-composition-mode)))
 
+(use-package typescript-mode
+  :config
+  (setq typescript-indent-level 2))
+
+(use-package tide
+  :config
+  (defun setup-tide-mode ()
+    (interactive)
+    (tide-setup)
+    (flycheck-mode +1)
+    (setq flycheck-check-syntax-automatically '(save mode-enabled))
+    (eldoc-mode +1)
+    (tide-hl-identifier-mode +1)
+    ;; company is an optional dependency. You have to
+    ;; install it separately via package-install
+    ;; `M-x package-install [ret] company`
+    (company-mode +1))
+  ;; aligns annotation to the right hand side
+  (setq company-tooltip-align-annotations t)
+
+  ;; formats the buffer before saving
+  (add-hook 'before-save-hook 'tide-format-before-save)
+
+  (add-hook 'typescript-mode-hook #'setup-tide-mode)
+  (setq tide-format-options '(:indentSize 2 :tabSize 2)))
+
+(use-package ng2-mode)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -420,7 +447,7 @@
     ("0c311fb22e6197daba9123f43da98f273d2bfaeeaeb653007ad1ee77f0003037" "14f0fbf6f7851bfa60bf1f30347003e2348bf7a1005570fd758133c87dafe08f" "4e753673a37c71b07e3026be75dc6af3efbac5ce335f3707b7d6a110ecb636a3" default)))
  '(package-selected-packages
    (quote
-    (delight neotree doom-themes dumb-jump go-eldoc go-mode buffer-move projectile-rails web-mode rbenv evil-search-highlight-persist default-text-scale evil-visual-mark-mode fill-column-indicator sos ido-completing-read+ zenburn-theme ido-vertical-mode markdown-mode yaml-mode clj-refactor ace-window goto-last-change emacs-sensible use-package-chords use-package avy enh-ruby-mode company-inf-ruby yasnippet minitest ruby-compilation ruby-test-mode robe inf-ruby flycheck whole-line-or-region org ag exec-path-from-shell yard-mode which-key smartparens rainbow-delimiters projectile paredit nyan-mode magit flx-ido company clojure-cheatsheet aggressive-indent))))
+    (dockerfile-mode ng2-mode tide delight neotree doom-themes dumb-jump go-eldoc go-mode buffer-move projectile-rails web-mode rbenv evil-search-highlight-persist default-text-scale evil-visual-mark-mode fill-column-indicator sos ido-completing-read+ zenburn-theme ido-vertical-mode markdown-mode yaml-mode clj-refactor ace-window goto-last-change emacs-sensible use-package-chords use-package avy enh-ruby-mode company-inf-ruby yasnippet minitest ruby-compilation ruby-test-mode robe inf-ruby flycheck whole-line-or-region org ag exec-path-from-shell yard-mode which-key smartparens rainbow-delimiters projectile paredit nyan-mode magit flx-ido company clojure-cheatsheet aggressive-indent))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
