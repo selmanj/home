@@ -495,7 +495,9 @@
 				(set (make-local-variable 'compile-command)
 				     "go build -v && go test -v && go vet"))))
   :config
-  (add-hook 'before-save-hook 'gofmt-before-save))
+  (setq gofmt-command "goimports")
+  (add-hook 'before-save-hook 'gofmt-before-save)
+  (electric-pair-local-mode))
 
 (use-package go-eldoc
   :init
