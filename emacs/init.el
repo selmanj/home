@@ -287,8 +287,6 @@
 				 (yas-minor-mode 1)
 				 (cljr-add-keybindings-with-prefix "C-c C-m")))) ;TODO: use bind-key here
 
-(use-package clojure-cheatsheet)
-
 (use-package rainbow-delimiters
   :init
   (add-hook 'clojure-mode-hook #'rainbow-delimiters-mode)
