@@ -1,0 +1,6 @@
+{
+    "editor.fontFamily": "Comic Code, Menlo, Monaco, 'Courier New', monospace",
+    "go.formatTool": "goimports",
+    "go.useLanguageServer": true,
+    "window.zoomLevel": 0
+}
